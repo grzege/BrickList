@@ -16,13 +16,14 @@
     </ListView>
 
     <Button
-        android:id="@+id/add_btn"
+        android:id="@+id/add_main_btn"
         android:layout_width="61dp"
         android:layout_height="60dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/roundbutton"
+        android:onClick="addProject"
         android:text="+"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
