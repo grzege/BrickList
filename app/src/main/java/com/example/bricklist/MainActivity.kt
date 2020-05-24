@@ -2,7 +2,8 @@ package com.example.bricklist
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -20,7 +21,8 @@ class MainActivity : AppCompatActivity() {
         val listItems = arrayListOf<String>("alfa", "beta", "gamma")
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems)
         listView.adapter = adapter
-        }
+
+    }
     fun addProject(v: View) {
         val i = Intent(this, NewProjectActivity::class.java)
         startActivity(i)
