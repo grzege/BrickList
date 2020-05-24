@@ -1,16 +1,14 @@
 package com.example.bricklist
 
-import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.BaseAdapter
 import android.widget.ListView
-import android.widget.TextView
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,12 +17,32 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val listView = findViewById<ListView>(R.id.main_listview)
-        val listItems = arrayListOf<String>("alfa","beta","gamma")
-        val adapter = ArrayAdapter(this,android.R.layout.simple_list_item_1,listItems)
-        listView.adapter=adapter
-    }
-    fun addProject(v:View){
-        val i= Intent(this,NewProjectActivity::class.java)
+        val listItems = arrayListOf<String>("alfa", "beta", "gamma")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems)
+        listView.adapter = adapter
+        }
+    fun addProject(v: View) {
+        val i = Intent(this, NewProjectActivity::class.java)
         startActivity(i)
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_settings -> {
+                val settingsIntent = Intent(this, SettingsActivity::class.java)
+                startActivity(settingsIntent)
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+                true
+            }
+        }
+    }
 }
+
