@@ -10,18 +10,25 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import com.example.bricklist.Tables.Inventory
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+    }
 
+    override fun onResume() {
+        super.onResume()
         val listView = findViewById<ListView>(R.id.main_listview)
-        val listItems = arrayListOf<String>("alfa", "beta", "gamma")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems)
-        listView.adapter = adapter
-
+        val databaseAccess = DatabaseAccess.getInstance(applicationContext)
+        databaseAccess?.open()
+        if (databaseAccess != null) {
+            val listItems = databaseAccess.returnInvNames()
+            val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems)
+            listView.adapter = adapter
+        }
     }
     fun addProject(v: View) {
         val i = Intent(this, NewProjectActivity::class.java)

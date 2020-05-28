@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import com.example.bricklist.Tables.Inventory
 
 class MainAdapter(private val context: Context,
-                  private val dataSource: ArrayList<Project>):BaseAdapter() {
+                  private val dataSource: ArrayList<Inventory>):BaseAdapter() {
     private val inflater: LayoutInflater =
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as
                 LayoutInflater
