@@ -7,7 +7,7 @@ import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.bricklist.tables.Inventory
-import com.example.bricklist.tables.Item
+import com.example.bricklist.tables.InventoryPart
 
 class DatabaseAccess private constructor(context: Context) {
     private val openHelper: SQLiteOpenHelper
@@ -32,21 +32,21 @@ class DatabaseAccess private constructor(context: Context) {
         values.put("LastAccessed", inventory.lastAccessed)
         db?.insert("Inventories",null,values)
     }
-    fun addInventoryItems(items: MutableList<Item>,InventoryID:Int){
-        for (i in 0 until items.size){
+    fun addInventoryItems(inventoryParts: MutableList<InventoryPart>, InventoryID:Int){
+        for (i in 0 until inventoryParts.size){
             val values = ContentValues()
-            val item=items[i]
+            val item=inventoryParts[i]
             val id = getCount("InventoriesParts")+1
             values.put("id",id)
             values.put("InventoryID",InventoryID)
             values.put("TypeID",item.itemType)
             values.put("ItemID",item.itemID)
-            values.put("QuantityInSet",item.quantity)
-            values.put("ColorID",item.color)
+            values.put("QuantityInSet",item.quantityInSet)
+            values.put("ColorID",item.colorID)
             db?.insert("InventoriesParts",null,values)
         }
     }
-    fun getCount(table:String):Long{
+    private fun getCount(table:String):Long{
         return DatabaseUtils.queryNumEntries(db,table)
     }
     fun findInventory(inventory: Inventory): Inventory? {
@@ -67,36 +67,66 @@ class DatabaseAccess private constructor(context: Context) {
         cursor?.close()
         return result
     }
-
-    fun returnInvNames():MutableList<String> {
-        val query = "select * from Inventories"
+    fun findColorName(colorID:Int): String? {
+        val query = "select Name from Colors where Code=\"$colorID\""
         val cursor = db?.rawQuery(query,null)
-        var names=mutableListOf<String>()
+        var name:String?=null
         if (cursor != null) {
-            while(cursor.moveToNext()){
-                var name = cursor.getString(1)
-                names.add(name)
+            if(cursor.moveToFirst()){
+                name = cursor.getString(0)
+                cursor.close()
             }
         }
         cursor?.close()
-        return names
+        return name
+    }
+    fun findBrickName(itemID:String): String? {
+        val query = "select Name from Parts where Code=\"$itemID\""
+        val cursor = db?.rawQuery(query,null)
+        var name:String?=null
+        if (cursor != null) {
+            if(cursor.moveToFirst()){
+                name = cursor.getString(0)
+                cursor.close()
+            }
+        }
+        cursor?.close()
+        return name
     }
     fun returnInventories():MutableList<Inventory> {
         val query = "select * from Inventories"
         val cursor = db?.rawQuery(query,null)
-        var inventories=mutableListOf<Inventory>()
+        val inventories=mutableListOf<Inventory>()
         if (cursor != null) {
             while(cursor.moveToNext()){
-                var id = cursor.getInt(0)
-                var name = cursor.getString(1)
-                var active = cursor.getInt(2)
-                var lastAccessed = cursor.getString(3)
+                val id = cursor.getInt(0)
+                val name = cursor.getString(1)
+                val active = cursor.getInt(2)
+                val lastAccessed = cursor.getString(3)
                 inventories.add(Inventory(id,name,active,lastAccessed))
             }
         }
         cursor?.close()
         return inventories
     }
+    fun returnInventoryParts(InventoryID: Int):MutableList<InventoryPart> {
+        val query = "select * from InventoriesParts where InventoryID=$InventoryID"
+        val cursor = db?.rawQuery(query,null)
+        val items=mutableListOf<InventoryPart>()
+        if (cursor != null) {
+            while(cursor.moveToNext()){
+                val itemType = cursor.getString(2)
+                val itemID = cursor.getString(3)
+                val quantityInSet = cursor.getInt(4)
+                val quantityInStore = cursor.getInt(5)
+                val colorID = cursor.getInt(6)
+                items.add(InventoryPart(itemID,itemType,colorID,quantityInSet,quantityInStore))
+            }
+        }
+        cursor?.close()
+        return items
+    }
+
     companion object {
         private var instance: DatabaseAccess? = null
         fun getInstance(context: Context): DatabaseAccess? {

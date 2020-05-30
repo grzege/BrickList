@@ -7,13 +7,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="176dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="350dp"
-            android:layout_height="175dp"
+            android:layout_width="221dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             app:srcCompat="@drawable/ic_launcher_foreground" />
 
@@ -25,24 +25,32 @@
 
             <TextView
                 android:id="@+id/brickName"
-                android:layout_width="match_parent"
+                android:layout_width="289dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="brickName" />
+                android:padding="5dp"
+                android:text="brickName"
+                android:textAlignment="textStart"
+                android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/brickID"
+                android:id="@+id/brickInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="brickID" />
+                android:padding="5dp"
+                android:text="brickInfo"
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/brickAmount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="brickAmount" />
+                android:padding="5dp"
+                android:text="brickAmount"
+                android:textSize="15sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>

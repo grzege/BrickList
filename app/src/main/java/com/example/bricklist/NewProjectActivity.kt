@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.example.bricklist.tables.Inventory
-import com.example.bricklist.tables.Item
+import com.example.bricklist.tables.InventoryPart
 import kotlinx.android.synthetic.main.activity_new_project.*
 import org.w3c.dom.Document
 import org.w3c.dom.Element
@@ -161,8 +161,8 @@ class NewProjectActivity : AppCompatActivity() {
         it.execute(url)
     }
 
-    fun loadData(): MutableList<Item> {
-        var itemList = mutableListOf<Item>()
+    fun loadData(): MutableList<InventoryPart> {
+        var itemList = mutableListOf<InventoryPart>()
 
         val filename = "inv.xml"
         val path = filesDir
@@ -210,7 +210,7 @@ class NewProjectActivity : AppCompatActivity() {
                             }
                         }
                         if (alternate == "N" && itemID != null && itemType != null && color != null && qty != null)
-                            itemList.add(Item(itemID, itemType, color, qty))
+                            itemList.add(InventoryPart(itemID, itemType, color, qty))
                     }
                 }
             }

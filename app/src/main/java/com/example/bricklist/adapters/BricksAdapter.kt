@@ -8,10 +8,11 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.example.bricklist.R
-import com.example.bricklist.tables.Inventory
+import com.example.bricklist.tables.Brick
 
-class InventoryAdapter(private val context: Context,
-                       private val dataSource: ArrayList<Inventory>):BaseAdapter() {
+class BricksAdapter(private val context: Context,
+                    private val dataSource: ArrayList<Brick>):BaseAdapter() {
+
     private val inflater: LayoutInflater =
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as
                 LayoutInflater
@@ -30,10 +31,19 @@ class InventoryAdapter(private val context: Context,
 
     @SuppressLint("ViewHolder")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val rowView = inflater.inflate(R.layout.inventory_list,parent,false)
-        val nameTextView = rowView.findViewById(R.id.InventoryName) as TextView
-        val inventory = getItem(position) as Inventory
-        nameTextView.text=inventory.name
+        val rowView = inflater.inflate(R.layout.inventory_part,parent,false)
+
+        val brickName = rowView.findViewById(R.id.brickName) as TextView
+        val brickInfo = rowView.findViewById(R.id.brickInfo) as TextView
+        val brickAmount = rowView.findViewById(R.id.brickAmount) as TextView
+
+        val brick = getItem(position) as Brick
+        brickName.text=brick.name
+        val infoText = brick.colorName + "[" + brick.itemID + "]"
+        brickInfo.text= infoText
+        val amountText = "${brick.quantityInStore} of ${brick.quantityInSet}"
+        brickAmount.text = amountText
+
         return rowView
     }
 }
