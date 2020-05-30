@@ -1,2 +1,2 @@
 # BrickList
- Application for Android wrote in kotlin made for course at PUT.
+ Application for Android written in kotlin for course at PUT.
