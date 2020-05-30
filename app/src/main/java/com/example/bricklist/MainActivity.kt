@@ -3,14 +3,13 @@ package com.example.bricklist
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
-import com.example.bricklist.Tables.Inventory
+import com.example.bricklist.adapters.InventoryAdapter
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,8 +24,8 @@ class MainActivity : AppCompatActivity() {
         val databaseAccess = DatabaseAccess.getInstance(applicationContext)
         databaseAccess?.open()
         if (databaseAccess != null) {
-            val listItems = databaseAccess.returnInvNames()
-            val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems)
+            val listItems = ArrayList(databaseAccess.returnInventories())
+            val adapter = InventoryAdapter(this,listItems)
             listView.adapter = adapter
         }
     }

@@ -1,19 +1,19 @@
-package com.example.bricklist.Tables
+package com.example.bricklist.tables
 
 import java.util.*
 
 class Inventory {
     val id:Int
     val name:String
-    var active:Boolean
+    var active:Int
     var lastAccessed: String
     constructor(id:Int,name:String){
         this.id=id
         this.name=name
-        this.active=false
+        this.active=1
         this.lastAccessed=getDate()
     }
-    constructor(id:Int,name:String,active:Boolean,lastAccessed:String){
+    constructor(id:Int,name:String,active:Int,lastAccessed:String){
         this.id=id
         this.name=name
         this.active=active

@@ -5,7 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.example.bricklist.Tables.Inventory
+import com.example.bricklist.tables.Inventory
 
 class DatabaseAccess private constructor(context: Context) {
     private val openHelper: SQLiteOpenHelper
@@ -41,10 +41,11 @@ class DatabaseAccess private constructor(context: Context) {
                 val name = cursor.getString(1)
                 val active = cursor.getString(2)
                 val lastAccessed = cursor.getString(3)
-                result = Inventory(id,name,active.toBoolean(),lastAccessed)
+                result = Inventory(id,name,active.toInt(),lastAccessed)
                 cursor.close()
             }
         }
+        cursor?.close()
         return result
     }
     fun returnInvNames():MutableList<String> {
@@ -57,7 +58,24 @@ class DatabaseAccess private constructor(context: Context) {
                 names.add(name)
             }
         }
+        cursor?.close()
         return names
+    }
+    fun returnInventories():MutableList<Inventory> {
+        val query = "select * from Inventories"
+        val cursor = db?.rawQuery(query,null)
+        var inventories=mutableListOf<Inventory>()
+        if (cursor != null) {
+            while(cursor.moveToNext()){
+                var id = cursor.getInt(0)
+                var name = cursor.getString(1)
+                var active = cursor.getInt(2)
+                var lastAccessed = cursor.getString(3)
+                inventories.add(Inventory(id,name,active,lastAccessed))
+            }
+        }
+        cursor?.close()
+        return inventories
     }
     companion object {
         private var instance: DatabaseAccess? = null

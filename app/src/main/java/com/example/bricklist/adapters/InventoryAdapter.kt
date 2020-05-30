@@ -1,14 +1,16 @@
-package com.example.bricklist
+package com.example.bricklist.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import com.example.bricklist.Tables.Inventory
+import android.widget.TextView
+import com.example.bricklist.R
+import com.example.bricklist.tables.Inventory
 
-class MainAdapter(private val context: Context,
-                  private val dataSource: ArrayList<Inventory>):BaseAdapter() {
+class InventoryAdapter(private val context: Context,
+                       private val dataSource: ArrayList<Inventory>):BaseAdapter() {
     private val inflater: LayoutInflater =
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as
                 LayoutInflater
@@ -26,6 +28,10 @@ class MainAdapter(private val context: Context,
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        TODO("Not yet implemented")
+        val rowView = inflater.inflate(R.layout.inventory_list,parent,false)
+        val nameTextView = rowView.findViewById(R.id.InventoryName) as TextView
+        val inventory = getItem(position) as Inventory
+        nameTextView.text=inventory.name
+        return rowView
     }
 }

@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import com.example.bricklist.Tables.Inventory
+import com.example.bricklist.tables.Inventory
 import kotlinx.android.synthetic.main.activity_new_project.*
 
 class NewProjectActivity : AppCompatActivity() {
