@@ -3,9 +3,11 @@ package com.example.bricklist
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.bricklist.tables.Inventory
+import com.example.bricklist.tables.Item
 
 class DatabaseAccess private constructor(context: Context) {
     private val openHelper: SQLiteOpenHelper
@@ -30,6 +32,23 @@ class DatabaseAccess private constructor(context: Context) {
         values.put("LastAccessed", inventory.lastAccessed)
         db?.insert("Inventories",null,values)
     }
+    fun addInventoryItems(items: MutableList<Item>,InventoryID:Int){
+        for (i in 0 until items.size){
+            val values = ContentValues()
+            val item=items[i]
+            val id = getCount("InventoriesParts")+1
+            values.put("id",id)
+            values.put("InventoryID",InventoryID)
+            values.put("TypeID",item.itemType)
+            values.put("ItemID",item.itemID)
+            values.put("QuantityInSet",item.quantity)
+            values.put("ColorID",item.color)
+            db?.insert("InventoriesParts",null,values)
+        }
+    }
+    fun getCount(table:String):Long{
+        return DatabaseUtils.queryNumEntries(db,table)
+    }
     fun findInventory(inventory: Inventory): Inventory? {
         var id=inventory.id
         val query = "select * from Inventories where id=$id"
@@ -48,6 +67,7 @@ class DatabaseAccess private constructor(context: Context) {
         cursor?.close()
         return result
     }
+
     fun returnInvNames():MutableList<String> {
         val query = "select * from Inventories"
         val cursor = db?.rawQuery(query,null)
