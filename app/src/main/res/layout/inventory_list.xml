@@ -10,6 +10,6 @@
         android:layout_height="50dp"
         android:paddingStart="20dp"
         android:paddingTop="12dp"
-        android:text="TEST_TEXT"
+        android:text="Test text"
         android:textSize="18sp" />
 </LinearLayout>

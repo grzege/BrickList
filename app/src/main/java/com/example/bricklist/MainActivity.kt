@@ -10,12 +10,14 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import com.example.bricklist.adapters.InventoryAdapter
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
     }
 
     override fun onResume() {
@@ -27,6 +29,11 @@ class MainActivity : AppCompatActivity() {
             val listItems = ArrayList(databaseAccess.returnInventories())
             val adapter = InventoryAdapter(this,listItems)
             listView.adapter = adapter
+            main_listview.setOnItemClickListener{_,_,position,_ ->
+                val selectedInventory = listItems[position]
+                val detailIntent = ProjectActivity.newIntent(this,selectedInventory)
+                startActivity(detailIntent)
+            }
         }
     }
     fun addProject(v: View) {

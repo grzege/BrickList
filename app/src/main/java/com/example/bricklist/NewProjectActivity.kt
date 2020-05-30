@@ -1,5 +1,6 @@
 package com.example.bricklist
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -24,19 +25,39 @@ class NewProjectActivity : AppCompatActivity() {
                 val toast = Toast.makeText(this, "Wprowadź nazwę", Toast.LENGTH_SHORT)
                 toast.show()
             }
-            !onCheck(view)-> {
+            !checkID()-> {
                 val id=projectID.text.toString().toInt()
                 val name = projectName.text.toString()
                 val databaseAccess = DatabaseAccess.getInstance(applicationContext)
                 databaseAccess?.open()
                 databaseAccess?.addInventory(Inventory(id,name))
                 databaseAccess?.close()
-                val toast = Toast.makeText(this, "Dodano nowy projekt!", Toast.LENGTH_SHORT)
+                finish()
+            }
+        }
+    }
+    fun onCheck(view:View)
+    {
+        when {
+            projectID.text.toString()=="" -> {
+                val toast = Toast.makeText(this, "Wprowadź ID", Toast.LENGTH_SHORT)
+                toast.show()
+            }
+            projectName.text.toString()=="" -> {
+                val toast = Toast.makeText(this, "Wprowadź nazwę", Toast.LENGTH_SHORT)
+                toast.show()
+            }
+            checkID() -> {
+                val toast = Toast.makeText(this, "Projekt o takim ID już istnieje", Toast.LENGTH_SHORT)
+                toast.show()
+            }
+            else -> {
+                val toast = Toast.makeText(this, "Nie istnieje projekt o takim ID", Toast.LENGTH_SHORT)
                 toast.show()
             }
         }
     }
-    fun onCheck(view:View):Boolean
+    private fun checkID():Boolean
     {
         when {
             projectID.text.toString()=="" -> {
@@ -53,13 +74,11 @@ class NewProjectActivity : AppCompatActivity() {
                 val databaseAccess = DatabaseAccess.getInstance(applicationContext)
                 databaseAccess?.open()
                 return if(databaseAccess?.findInventory(Inventory(id,name))!=null){
+                    databaseAccess.close()
                     val toast = Toast.makeText(this, "Projekt o takim ID już istnieje", Toast.LENGTH_SHORT)
                     toast.show()
-                    databaseAccess.close()
                     true
                 }else{
-                    val toast = Toast.makeText(this, "Nie istnieje projekt o takim ID", Toast.LENGTH_SHORT)
-                    toast.show()
                     databaseAccess?.close()
                     false
                 }
