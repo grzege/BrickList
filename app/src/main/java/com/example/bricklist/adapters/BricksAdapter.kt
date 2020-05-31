@@ -2,12 +2,15 @@ package com.example.bricklist.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.example.bricklist.R
 import com.example.bricklist.database.DatabaseAccess
 import com.example.bricklist.tables.Brick
@@ -40,6 +43,7 @@ class BricksAdapter(private val context: Context,
         val brickAmount = rowView.findViewById(R.id.brickAmount) as TextView
         val brickPlus = rowView.findViewById(R.id.brickPlus) as Button
         val brickMinus = rowView.findViewById(R.id.brickMinus) as Button
+        val layout = rowView.findViewById(R.id.itemLayout) as LinearLayout
 
         val brick = getItem(position) as Brick
         brickName.text=brick.name
@@ -47,6 +51,10 @@ class BricksAdapter(private val context: Context,
         brickInfo.text= infoText
         val amountText = "${brick.quantityInStore} of ${brick.quantityInSet}"
         brickAmount.text = amountText
+
+        if(brick.quantityInStore==brick.quantityInSet)
+            layout.setBackgroundColor(Color.GREEN)
+
         brickPlus.setOnClickListener{
             val databaseAccess = DatabaseAccess.getInstance(context)
             databaseAccess?.open()
@@ -54,6 +62,7 @@ class BricksAdapter(private val context: Context,
             brick.quantityInStore= databaseAccess!!.returnStore(brick.id)!!
             databaseAccess?.close()
             this.notifyDataSetChanged()
+
         }
         brickMinus.setOnClickListener{
             val databaseAccess = DatabaseAccess.getInstance(context)
