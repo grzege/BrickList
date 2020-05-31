@@ -1,4 +1,4 @@
-package com.example.bricklist
+package com.example.bricklist.database
 
 import android.content.ContentValues
 import android.content.Context
@@ -115,23 +115,71 @@ class DatabaseAccess private constructor(context: Context) {
         val items=mutableListOf<InventoryPart>()
         if (cursor != null) {
             while(cursor.moveToNext()){
+                val id = cursor.getString(0).toInt()
                 val itemType = cursor.getString(2)
                 val itemID = cursor.getString(3)
                 val quantityInSet = cursor.getInt(4)
                 val quantityInStore = cursor.getInt(5)
                 val colorID = cursor.getInt(6)
-                items.add(InventoryPart(itemID,itemType,colorID,quantityInSet,quantityInStore))
+                items.add(InventoryPart(id,itemID,itemType,colorID,quantityInSet,quantityInStore))
             }
         }
         cursor?.close()
         return items
+    }
+    fun returnStore(partID: Int): Int?
+    {
+        val query = "select QuantityInStore from InventoriesParts where id=$partID"
+        val cursor = db?.rawQuery(query,null)
+        var qty: Int? =null
+        if (cursor != null) {
+            if(cursor.moveToFirst()){
+                qty = cursor.getInt(0)
+                cursor.close()
+            }
+        }
+        cursor?.close()
+        return qty
+    }
+    fun changeStore(partID:Int,inc:Boolean){
+        val query = "select * from InventoriesParts where id=$partID"
+        val cursor = db?.rawQuery(query,null)
+        if (cursor != null) {
+            if(cursor.moveToFirst()){
+                val id = cursor.getInt(0)
+                val inventoryID = cursor.getInt(1)
+                val itemType = cursor.getString(2)
+                val itemID = cursor.getString(3)
+                val quantityInSet = cursor.getInt(4)
+                var quantityInStore = cursor.getInt(5)
+                if(quantityInStore<quantityInSet&&inc)
+                    quantityInStore+=1
+                if(quantityInStore>0&&!inc)
+                    quantityInStore-=1
+                val colorID = cursor.getInt(6)
+                val extra = cursor.getString(7)
+                cursor.close()
+                val values = ContentValues()
+                values.put("id",id)
+                values.put("InventoryID",inventoryID)
+                values.put("TypeID",itemType)
+                values.put("ItemID",itemID)
+                values.put("QuantityInSet",quantityInSet)
+                values.put("quantityInStore",quantityInStore)
+                values.put("ColorID",colorID)
+                values.put("Extra",extra)
+                db?.update("InventoriesParts",values,"id=?",arrayOf(id.toString()))
+            }
+        }
+
     }
 
     companion object {
         private var instance: DatabaseAccess? = null
         fun getInstance(context: Context): DatabaseAccess? {
             if (instance == null) {
-                instance = DatabaseAccess(context)
+                instance =
+                    DatabaseAccess(context)
             }
             return instance
         }

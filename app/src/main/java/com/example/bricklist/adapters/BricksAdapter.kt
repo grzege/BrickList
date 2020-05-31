@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Button
 import android.widget.TextView
 import com.example.bricklist.R
+import com.example.bricklist.database.DatabaseAccess
 import com.example.bricklist.tables.Brick
 
 class BricksAdapter(private val context: Context,
@@ -36,6 +38,8 @@ class BricksAdapter(private val context: Context,
         val brickName = rowView.findViewById(R.id.brickName) as TextView
         val brickInfo = rowView.findViewById(R.id.brickInfo) as TextView
         val brickAmount = rowView.findViewById(R.id.brickAmount) as TextView
+        val brickPlus = rowView.findViewById(R.id.brickPlus) as Button
+        val brickMinus = rowView.findViewById(R.id.brickMinus) as Button
 
         val brick = getItem(position) as Brick
         brickName.text=brick.name
@@ -43,7 +47,22 @@ class BricksAdapter(private val context: Context,
         brickInfo.text= infoText
         val amountText = "${brick.quantityInStore} of ${brick.quantityInSet}"
         brickAmount.text = amountText
-
+        brickPlus.setOnClickListener{
+            val databaseAccess = DatabaseAccess.getInstance(context)
+            databaseAccess?.open()
+            databaseAccess?.changeStore(brick.id,true)
+            brick.quantityInStore= databaseAccess!!.returnStore(brick.id)!!
+            databaseAccess?.close()
+            this.notifyDataSetChanged()
+        }
+        brickMinus.setOnClickListener{
+            val databaseAccess = DatabaseAccess.getInstance(context)
+            databaseAccess?.open()
+            databaseAccess?.changeStore(brick.id,false)
+            brick.quantityInStore= databaseAccess!!.returnStore(brick.id)!!
+            databaseAccess?.close()
+            this.notifyDataSetChanged()
+        }
         return rowView
     }
 }

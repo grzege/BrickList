@@ -1,4 +1,4 @@
-package com.example.bricklist
+package com.example.bricklist.activities
 
 import android.content.Intent
 import android.os.AsyncTask
@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import com.example.bricklist.R
+import com.example.bricklist.objects.Settings
+import com.example.bricklist.database.DatabaseAccess
 import com.example.bricklist.tables.Inventory
 import com.example.bricklist.tables.InventoryPart
 import kotlinx.android.synthetic.main.activity_new_project.*

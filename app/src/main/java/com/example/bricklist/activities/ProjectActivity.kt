@@ -1,11 +1,13 @@
-package com.example.bricklist
+package com.example.bricklist.activities
 
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ListView
+import com.example.bricklist.R
 import com.example.bricklist.adapters.BricksAdapter
+import com.example.bricklist.database.DatabaseAccess
 import com.example.bricklist.tables.Brick
 import com.example.bricklist.tables.Inventory
 
@@ -22,13 +24,14 @@ class ProjectActivity : AppCompatActivity() {
         val bricks = mutableListOf<Brick>()
         if (inventoryParts != null) {
             for (i in 0 until inventoryParts.size) {
+                val id = inventoryParts[i].id
                 val itemID = inventoryParts[i].itemID
                 val name = databaseAccess.findBrickName(itemID)
                 val colorName = databaseAccess.findColorName(inventoryParts[i].colorID)
                 val quantityInSet = inventoryParts[i].quantityInSet
                 val quantityInStore = inventoryParts[i].quantityInStore
-                if (name != null && colorName != null && itemID != null)
-                    bricks.add(Brick(name, colorName, itemID, quantityInSet, quantityInStore))
+                if (name != null && colorName != null)
+                    bricks.add(Brick(id, name, colorName, itemID, quantityInSet, quantityInStore))
             }
         }
         val listView = findViewById<ListView>(R.id.project_listView)
@@ -43,7 +46,8 @@ class ProjectActivity : AppCompatActivity() {
         val EXTRA_LAST = "last"
 
         fun newIntent(context: Context,inventory: Inventory): Intent {
-            val detailIntent = Intent(context,ProjectActivity::class.java)
+            val detailIntent = Intent(context,
+                ProjectActivity::class.java)
 
             detailIntent.putExtra(EXTRA_ID,inventory.id.toString())
             detailIntent.putExtra(EXTRA_NAME,inventory.name)

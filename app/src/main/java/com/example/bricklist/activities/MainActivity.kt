@@ -1,4 +1,4 @@
-package com.example.bricklist
+package com.example.bricklist.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,9 +7,10 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.ListView
+import com.example.bricklist.R
 import com.example.bricklist.adapters.InventoryAdapter
+import com.example.bricklist.database.DatabaseAccess
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -31,7 +32,11 @@ class MainActivity : AppCompatActivity() {
             listView.adapter = adapter
             main_listview.setOnItemClickListener{_,_,position,_ ->
                 val selectedInventory = listItems[position]
-                val detailIntent = ProjectActivity.newIntent(this,selectedInventory)
+                val detailIntent =
+                    ProjectActivity.newIntent(
+                        this,
+                        selectedInventory
+                    )
                 startActivity(detailIntent)
             }
         }
