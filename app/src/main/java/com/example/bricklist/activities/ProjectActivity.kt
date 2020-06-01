@@ -32,6 +32,8 @@ class ProjectActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project)
+        val actionBar = supportActionBar
+        actionBar!!.title = "Project"
         val inventoryID = intent.extras?.getString(EXTRA_ID)
 
         val databaseAccess = DatabaseAccess.getInstance(applicationContext)

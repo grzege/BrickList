@@ -9,6 +9,8 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+        val actionBar = supportActionBar
+        actionBar!!.title = "Settings"
         supportFragmentManager.beginTransaction()
             .replace(android.R.id.content,
                 SettingsFragment()

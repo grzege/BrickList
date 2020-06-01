@@ -30,8 +30,9 @@ class NewProjectActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_project)
+        val actionBar = supportActionBar
+        actionBar!!.title = "New Project"
     }
-
     fun onAdd(view: View) {
         when {
             projectID.text.toString() == "" -> {
