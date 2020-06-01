@@ -26,6 +26,7 @@ import javax.xml.parsers.DocumentBuilderFactory
 
 class NewProjectActivity : AppCompatActivity() {
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_project)
@@ -47,24 +48,8 @@ class NewProjectActivity : AppCompatActivity() {
             }
             !checkID() -> {
                 val id = projectID.text.toString().toInt()
-                val name = projectName.text.toString()
-                val databaseAccess = DatabaseAccess.getInstance(applicationContext)
-                databaseAccess?.open()
-
                 val invURL = Settings.prefix + id + ".xml"
                 downloadData(invURL)
-                val items = loadData()
-                if(items.size!=0)
-                {
-                    databaseAccess?.addInventory(Inventory(id, name))
-                    databaseAccess?.addInventoryItems(items,id)
-                }else{
-                    val toast = Toast.makeText(this, "Nie znaleziono klocków dla projektu o danym id", Toast.LENGTH_SHORT)
-                    toast.show()
-                }
-                databaseAccess?.close()
-                val i = Intent(this, MainActivity::class.java)
-                startActivity(i)
             }
         }
     }
@@ -107,10 +92,10 @@ class NewProjectActivity : AppCompatActivity() {
                 toast.show()
             }
             else -> {
-                val id = projectID.text.toString().toInt()
-                val name = projectName.text.toString()
                 val databaseAccess = DatabaseAccess.getInstance(applicationContext)
                 databaseAccess?.open()
+                val id = projectID.text.toString().toInt()
+                val name = projectName.text.toString()
                 return if (databaseAccess?.findInventory(Inventory(id, name)) != null) {
                     databaseAccess.close()
                     val toast =
@@ -133,6 +118,20 @@ class NewProjectActivity : AppCompatActivity() {
 
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
+            val databaseAccess = DatabaseAccess.getInstance(applicationContext)
+            databaseAccess?.open()
+            val items = loadData()
+            if(items.size!=0)
+            {
+                val id = projectID.text.toString().toInt()
+                val name = projectName.text.toString()
+                databaseAccess?.addInventory(Inventory(id, name))
+                databaseAccess?.addInventoryItems(items,id)
+            }
+            databaseAccess?.close()
+            val i = Intent(applicationContext, MainActivity::class.java)
+            finish()
+            startActivity(i)
         }
 
         override fun doInBackground(vararg params: String?): String {

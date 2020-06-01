@@ -95,6 +95,19 @@ class DatabaseAccess private constructor(context: Context) {
         cursor?.close()
         return name
     }
+    fun findUniqueCode(itemID:String,colorID: Int): Int? {
+        val query = "select Code from Codes where ItemID=\"$itemID\" and ColorID=$colorID"
+        val cursor = db?.rawQuery(query,null)
+        var code:Int?=null
+        if (cursor != null) {
+            if(cursor.moveToFirst()){
+                code = cursor.getInt(0)
+                cursor.close()
+            }
+        }
+        cursor?.close()
+        return code
+    }
     fun returnInventories():MutableList<Inventory> {
         val query = "select * from Inventories"
         val cursor = db?.rawQuery(query,null)
@@ -180,6 +193,9 @@ class DatabaseAccess private constructor(context: Context) {
         }
         cursor?.close()
         return qty
+    }
+    fun returnImg(){
+
     }
     fun changeStore(partID:Int,inc:Boolean){
         val query = "select * from InventoriesParts where id=$partID"

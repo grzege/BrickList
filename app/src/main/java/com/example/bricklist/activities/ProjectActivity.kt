@@ -47,10 +47,15 @@ class ProjectActivity : AppCompatActivity() {
                 val colorName = databaseAccess.findColorName(inventoryParts[i].colorID)
                 val quantityInSet = inventoryParts[i].quantityInSet
                 val quantityInStore = inventoryParts[i].quantityInStore
-                if (name != null && colorName != null)
-                    bricks.add(Brick(id, name, colorName, itemID, quantityInSet, quantityInStore))
+                val colorID = inventoryParts[i].colorID
+                val code = databaseAccess.findUniqueCode(itemID,colorID)
+                if (name != null && colorName != null && code != null)
+                    bricks.add(Brick(id, name, colorName, itemID, quantityInSet, quantityInStore,colorID,code))
+                else if (name != null && colorName != null)
+                    bricks.add(Brick(id, name, colorName, itemID, quantityInSet, quantityInStore,colorID))
             }
         }
+        databaseAccess?.close()
         val listView = findViewById<ListView>(R.id.project_listView)
         val listItems = ArrayList(bricks)
         val adapter = BricksAdapter(this, listItems)
