@@ -1,6 +1,8 @@
 package com.example.bricklist.objects
 
+import androidx.preference.PreferenceManager
+
 object Settings {
-    var prefix:String = "http://fcds.cs.put.poznan.pl/MyWeb/BL/"
-    var archive:String = "false"
+    var prefix:String? = ""
+    var archive:Boolean? = true
 }

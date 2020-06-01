@@ -6,8 +6,10 @@ import android.database.Cursor
 import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.example.bricklist.objects.Settings
 import com.example.bricklist.tables.Inventory
 import com.example.bricklist.tables.InventoryPart
+import java.util.*
 
 class DatabaseAccess private constructor(context: Context) {
     private val openHelper: SQLiteOpenHelper
@@ -103,11 +105,49 @@ class DatabaseAccess private constructor(context: Context) {
                 val name = cursor.getString(1)
                 val active = cursor.getInt(2)
                 val lastAccessed = cursor.getString(3)
-                inventories.add(Inventory(id,name,active,lastAccessed))
+                if(active==1|| !Settings.archive!!)inventories.add(Inventory(id,name,active,lastAccessed))
             }
         }
         cursor?.close()
         return inventories
+    }
+    fun updateAccessDate(inventoryID:Int)
+    {
+        val query = "select * from Inventories where id=$inventoryID"
+        val cursor = db?.rawQuery(query,null)
+        if (cursor != null) {
+            if (cursor.moveToFirst()){
+                val id = cursor.getInt(0)
+                val name = cursor.getString(1)
+                val active = cursor.getInt(2)
+                val lastAccessed = getDate()
+                val values = ContentValues()
+                values.put("id",id)
+                values.put("Name",name)
+                values.put("Active",active)
+                values.put("LastAccessed", lastAccessed)
+                db?.update("Inventories",values,"id=?",arrayOf(id.toString()))
+            }
+        }
+    }
+    fun archive(inventoryID:Int)
+    {
+        val query = "select * from Inventories where id=$inventoryID"
+        val cursor = db?.rawQuery(query,null)
+        if (cursor != null) {
+            if (cursor.moveToFirst()){
+                val id = cursor.getInt(0)
+                val name = cursor.getString(1)
+                val active = 0
+                val lastAccessed = cursor.getString(3)
+                val values = ContentValues()
+                values.put("id",id)
+                values.put("Name",name)
+                values.put("Active",active)
+                values.put("LastAccessed", lastAccessed)
+                db?.update("Inventories",values,"id=?",arrayOf(id.toString()))
+            }
+        }
     }
     fun returnInventoryParts(InventoryID: Int):MutableList<InventoryPart> {
         val query = "select * from InventoriesParts where InventoryID=$InventoryID"
@@ -173,7 +213,15 @@ class DatabaseAccess private constructor(context: Context) {
         }
 
     }
-
+    private fun getDate():String{
+        val currentYear: String = Calendar.getInstance().get(Calendar.YEAR).toString();
+        val currentMonth: String = String.format("%02d",(Calendar.getInstance().get(Calendar.MONTH)+1))//miesiące indeksowane są od 0
+        val currentDay: String =  String.format("%02d",Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
+        val currentHour: String =  String.format("%02d",Calendar.getInstance().get(Calendar.HOUR_OF_DAY))
+        val currentMin: String =  String.format("%02d",Calendar.getInstance().get(Calendar.MINUTE))
+        val currentSec: String =  String.format("%02d",Calendar.getInstance().get(Calendar.SECOND))
+        return "$currentDay.$currentMonth.$currentYear $currentHour:$currentMin:$currentSec"
+    }
     companion object {
         private var instance: DatabaseAccess? = null
         fun getInstance(context: Context): DatabaseAccess? {

@@ -37,6 +37,10 @@ class NewProjectActivity : AppCompatActivity() {
                 val toast = Toast.makeText(this, "Wprowadź ID", Toast.LENGTH_SHORT)
                 toast.show()
             }
+            projectID.text.toString().toIntOrNull()==null-> {
+                val toast = Toast.makeText(this, "ID musi być liczbą całkowitą!", Toast.LENGTH_SHORT)
+                toast.show()
+            }
             projectName.text.toString() == "" -> {
                 val toast = Toast.makeText(this, "Wprowadź nazwę", Toast.LENGTH_SHORT)
                 toast.show()
@@ -46,13 +50,18 @@ class NewProjectActivity : AppCompatActivity() {
                 val name = projectName.text.toString()
                 val databaseAccess = DatabaseAccess.getInstance(applicationContext)
                 databaseAccess?.open()
-                databaseAccess?.addInventory(Inventory(id, name))
+
                 val invURL = Settings.prefix + id + ".xml"
                 downloadData(invURL)
                 val items = loadData()
-                databaseAccess?.addInventoryItems(items,id)
-                //val toast = Toast.makeText(this, items.size.toString(), Toast.LENGTH_SHORT)
-                //toast.show()
+                if(items.size!=0)
+                {
+                    databaseAccess?.addInventory(Inventory(id, name))
+                    databaseAccess?.addInventoryItems(items,id)
+                }else{
+                    val toast = Toast.makeText(this, "Nie znaleziono klocków dla projektu o danym id", Toast.LENGTH_SHORT)
+                    toast.show()
+                }
                 databaseAccess?.close()
                 val i = Intent(this, MainActivity::class.java)
                 startActivity(i)
@@ -64,6 +73,10 @@ class NewProjectActivity : AppCompatActivity() {
         when {
             projectID.text.toString() == "" -> {
                 val toast = Toast.makeText(this, "Wprowadź ID", Toast.LENGTH_SHORT)
+                toast.show()
+            }
+            projectID.text.toString().toIntOrNull()==null-> {
+                val toast = Toast.makeText(this, "ID musi być liczbą całkowitą!", Toast.LENGTH_SHORT)
                 toast.show()
             }
             projectName.text.toString() == "" -> {
@@ -216,8 +229,10 @@ class NewProjectActivity : AppCompatActivity() {
                             itemList.add(InventoryPart(itemID, itemType, color, qty))
                     }
                 }
+                //file.delete()
             }
         }
+
         return itemList
     }
 }

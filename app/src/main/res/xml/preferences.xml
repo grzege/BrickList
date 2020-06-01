@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <EditTextPreference
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:defaultValue="true"
-        android:key="prefixOfURL"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="Prefix of URL"
-        app:useSimpleSummaryProvider="true" />
-    <SwitchPreferenceCompat
-        android:id="@+id/isArchived"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:defaultValue="false"
-        android:key="archive"
-        android:summaryOff="Show archived"
-        android:summaryOn="Hide archived"
-        android:title="Archive" />
+    <PreferenceCategory android:layout_width="2000dp">
+        <EditTextPreference
+            android:id="@+id/prefixOfUrl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="@string/prefix"
+            android:key="prefixOfURL"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Prefix of URL"
+            app:useSimpleSummaryProvider="true" />
+        <SwitchPreferenceCompat
+            android:id="@+id/isArchived"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="archive"
+            android:summaryOff="@string/archivedOn"
+            android:summaryOn="@string/archivedOff"
+            android:title="Archive" />
+    </PreferenceCategory>
 </PreferenceScreen>

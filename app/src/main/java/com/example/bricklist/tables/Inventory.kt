@@ -21,8 +21,11 @@ class Inventory {
     }
     private fun getDate():String{
         val currentYear: String = Calendar.getInstance().get(Calendar.YEAR).toString();
-        val currentMonth: String = (Calendar.getInstance().get(Calendar.MONTH)+1).toString();//miesiące indeksowane są od 0
-        val currentDay: String = Calendar.getInstance().get(Calendar.DAY_OF_MONTH).toString();
-        return "$currentDay.$currentMonth.$currentYear"
+        val currentMonth: String = String.format("%02d",(Calendar.getInstance().get(Calendar.MONTH)+1))//miesiące indeksowane są od 0
+        val currentDay: String =  String.format("%02d",Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
+        val currentHour: String =  String.format("%02d",Calendar.getInstance().get(Calendar.HOUR_OF_DAY))
+        val currentMin: String =  String.format("%02d",Calendar.getInstance().get(Calendar.MINUTE))
+        val currentSec: String =  String.format("%02d",Calendar.getInstance().get(Calendar.SECOND))
+        return "$currentDay.$currentMonth.$currentYear $currentHour:$currentMin:$currentSec"
     }
 }

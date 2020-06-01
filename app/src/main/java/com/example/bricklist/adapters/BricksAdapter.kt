@@ -47,20 +47,20 @@ class BricksAdapter(private val context: Context,
 
         val brick = getItem(position) as Brick
         brickName.text=brick.name
-        val infoText = brick.colorName + "[" + brick.itemID + "]"
+        val infoText = brick.colorName + " [" + brick.itemID + "]"
         brickInfo.text= infoText
         val amountText = "${brick.quantityInStore} of ${brick.quantityInSet}"
         brickAmount.text = amountText
 
         if(brick.quantityInStore==brick.quantityInSet)
-            layout.setBackgroundColor(Color.GREEN)
+            layout.setBackgroundColor(Color.rgb(46, 238, 255))
 
         brickPlus.setOnClickListener{
             val databaseAccess = DatabaseAccess.getInstance(context)
             databaseAccess?.open()
             databaseAccess?.changeStore(brick.id,true)
             brick.quantityInStore= databaseAccess!!.returnStore(brick.id)!!
-            databaseAccess?.close()
+            databaseAccess.close()
             this.notifyDataSetChanged()
 
         }
@@ -69,7 +69,7 @@ class BricksAdapter(private val context: Context,
             databaseAccess?.open()
             databaseAccess?.changeStore(brick.id,false)
             brick.quantityInStore= databaseAccess!!.returnStore(brick.id)!!
-            databaseAccess?.close()
+            databaseAccess.close()
             this.notifyDataSetChanged()
         }
         return rowView
